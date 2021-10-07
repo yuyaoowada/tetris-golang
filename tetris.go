@@ -159,7 +159,7 @@ func drawDisp() {
 	dispStr += "d:右,"
 	dispStr += "s:下,"
 	dispStr += "スペース:回転\n,"
-	dispStr += "q:終了\n,"
+	dispStr += "q:終了\n"
 
 	// まとめて表示
 	fmt.Printf("%s", dispStr)
@@ -176,11 +176,51 @@ func mainLoop() {
 		select {
 		case <-timer.C:
 			timer = time.NewTimer(loopms * time.Millisecond)
+			// fmt.Printf(".")
+			// 描画
+			drawDisp()
+			break
 		}
-		// 描画
-		drawDisp()
-		break
 	}
+}
+
+// すでに積んであるブロックと現在のブロックの当たり判定
+func intersectBlock(directionX, directionY int) int {
+	for innerY := 0; innerY < 4; innerY++ {
+		for innerX := 0; innerX < 4; innerX++ {
+			x := nowBlockX + innerX + directionX
+			y := nowBlockY + innerY + directionY
+			if y == dispH || x <= -1 || x >= dispW {
+				// 境界との当たり判定
+				if nowBlock[innerY][innerX] != 0 {
+					return 1
+				}
+			}
+			if (0 <= x && x < dispW) && (0 <= y && y < dispH) {
+				// フィールドとの当たり判定
+				if nowBlock[innerY][innerX] != 0 && field[y][x] != 0 {
+					return 1
+				}
+			}
+		}
+	}
+	return 0
+}
+
+// ブロックがはみ出しているか
+func intersectBlockUpper() int {
+	for innerY := 0; innerY < 4; innerY++ {
+		for innerX := 0; innerX < 4; innerX++ {
+			y := nowBlockY + innerY
+			if y < 0 {
+				// 境界との当たり判定
+				if nowBlock[innerY][innerX] != 0 {
+					return 1
+				}
+			}
+		}
+	}
+	return 0
 }
 
 func main() {
