@@ -110,8 +110,6 @@ func drawDisp() {
 	// 表示文字列
 	dispStr := ""
 
-	// Todo
-
 	// 描画位置調整
 	for y := 0; y < showY; y++ {
 		dispStr += "\n"
@@ -340,7 +338,6 @@ func execGame(str string) {
 			waitBlockCnt = waitBlockFPS
 		}
 		gameStatus++
-		break
 	case 2: // 降っている状態
 		{
 			if str == " " { // 回転
@@ -412,11 +409,9 @@ func execGame(str string) {
 				}
 			}
 		}
-		break
 	case 3: //ゲームオーバー
 		fmt.Printf("GameOver.\n")
 		os.Exit(0)
-		break
 	}
 }
 
